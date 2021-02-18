@@ -31,11 +31,17 @@ class TestFraction(unittest.TestCase):
         self.assertEqual(str(Fraction(3, 2)), "3/2")
 
     def test_eq(self) -> None:
-        self.assertTrue(Fraction(1,2) == Fraction(9,18))  # Uses __eq__ for ==
+        self.assertTrue(Fraction(1,2) == Fraction(1,2)) # Uses __eq__ for ==
+        self.assertTrue(Fraction(1,2) == Fraction(9,18))  
         self.assertEqual(Fraction(-12, -15), Fraction(4, 5)) # Uses __eq__ for assertEqual
 
     def test_add(self) -> None:
-        self.assertEqual(Fraction(1,2) + Fraction(1,3), Fraction(5, 6))
+        # self._denom == other._denom
+        self.assertEqual(Fraction(1,5) + Fraction(2,5), Fraction(3,5)) 
+        # self._denom != other._denom and result._denom == self._denom * other._denom
+        self.assertEqual(Fraction(1,2) + Fraction(1,3), Fraction(5, 6))  
+        # self._denom != other._denom and result._denom != self._denom * other._denom
+        self.assertEqual(Fraction(1,6) + Fraction(1,3), Fraction(1,2))
 
 if __name__ == '__main__':
     unittest.main()
