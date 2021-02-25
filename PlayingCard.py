@@ -31,10 +31,10 @@ class PlayingCard(AbstractCard):
         return str(self._RANK_NAMES[self.rank()] + ' of ' + self.suit())
     
     @staticmethod
-    def makeDeck() -> List['PlayingCard']:
+    def makeDeck() -> List[AbstractCard]:
         """Return a List of all possible PlayingCards (in fact, the cards that would be found
         in a normal deck, apart from the jokers)."""
-        deck:List[PlayingCard] = []
+        deck:List[AbstractCard] = []
         for suit in PlayingCard._SUITS:
             for rank in range(PlayingCard._MIN_RANK, PlayingCard._MAX_RANK+1):
                 deck.append(PlayingCard(suit, rank))

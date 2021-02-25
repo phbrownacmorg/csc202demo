@@ -2,14 +2,14 @@ import unittest
 from UnoCard import UnoCard
 from typing import List
 
-class TestCard(unittest.TestCase):
+class TestUnoCard(unittest.TestCase):
     def test_construction(self) -> None:
         # Uses the postcondition in the constructor to test different suits and ranks.
         # The point is that the postcondition will trigger an error if the suit (or rank)
         #    doesn't work.
         card:UnoCard = UnoCard('green', 5)
-        card = UnoCard('blue', 1)
-        card = UnoCard('yellow', 13)
+        card = UnoCard('blue', 0)
+        card = UnoCard('yellow', 12)
         self.assertTrue(card._invariant())
 
     def test_constructor_pre_bad_suit(self) -> None:
@@ -18,11 +18,19 @@ class TestCard(unittest.TestCase):
         
     def test_constructor_pre_low_rank(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('green', 0)
+            card:UnoCard = UnoCard('green', -1)
+
+    def test_constructor_pre_low_wild_rank(self) -> None:
+        with self.assertRaises(AssertionError):
+            card:UnoCard = UnoCard('wild', 5)
 
     def test_constructor_pre_high_rank(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('blue', 14)
+            card:UnoCard = UnoCard('blue', 15)
+
+    def test_constructor_pre_high_color_rank(self) -> None:
+        with self.assertRaises(AssertionError):
+            card:UnoCard = UnoCard('blue', 13)
 
     def test_rank(self) -> None:
         self.assertEqual(UnoCard('yellow', 5).rank(), 5)
