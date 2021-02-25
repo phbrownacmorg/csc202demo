@@ -1,5 +1,4 @@
 import abc
-from functools import total_ordering
 from typing import cast, List, Tuple
 
 # @total_ordering
