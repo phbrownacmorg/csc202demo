@@ -32,7 +32,7 @@ class AbstractCard(abc.ABC):
 
     def __str__(self) -> str:
         """Return a string representation of a Card."""
-        return str(self.suit() + ' ' + self._RANK_NAMES[self.rank()])
+        return str(self.suit() + ' ' + self._RANK_NAMES[self.rank()]).strip()
 
     def __eq__(self, other:object) -> bool:
         """Returns True iff the ranks and suits are equal."""

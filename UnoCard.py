@@ -39,4 +39,17 @@ class UnoCard(AbstractCard):
     @staticmethod
     def makeDeck() -> List[AbstractCard]:
         """Make and return a list with all the cards in a standard Uno deck."""
-        return []
+        deck:List[AbstractCard] = []
+        # Add the zeroes (1 each color)
+        for suit in UnoCard._COLOR_SUITS:
+            deck.append(UnoCard(suit, 0))
+        # Add the rest of the color cards (2 each)
+        for rank in UnoCard._COLOR_RANKS[1:]:
+            for suit in UnoCard._COLOR_SUITS:
+                for i in range(2):
+                    deck.append(UnoCard(suit, rank))
+        # Add the wild cards (4 each)
+        for rank in UnoCard._WILD_RANKS:
+            for i in range(4):
+                deck.append(UnoCard('Wild', rank))
+        return deck
