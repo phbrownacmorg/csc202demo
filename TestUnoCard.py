@@ -15,23 +15,23 @@ class TestUnoCard(unittest.TestCase):
 
     def test_constructor_pre_bad_suit(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('bones', 5)
+            UnoCard('bones', 5)
         
     def test_constructor_pre_low_rank(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('green', -1)
+            UnoCard('green', -1)
 
     def test_constructor_pre_low_wild_rank(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('wild', 5)
+            UnoCard('wild', 5)
 
     def test_constructor_pre_high_rank(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('blue', 15)
+            UnoCard('blue', 15)
 
     def test_constructor_pre_high_color_rank(self) -> None:
         with self.assertRaises(AssertionError):
-            card:UnoCard = UnoCard('blue', 13)
+            UnoCard('blue', 13)
 
     def test_rank(self) -> None:
         self.assertEqual(UnoCard('yellow', 5).rank(), 5)

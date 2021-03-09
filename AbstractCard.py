@@ -1,5 +1,5 @@
 import abc
-from typing import cast, List, Tuple
+from typing import cast, List
 
 # @total_ordering
 class AbstractCard(abc.ABC):
