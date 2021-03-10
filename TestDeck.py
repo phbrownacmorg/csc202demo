@@ -78,10 +78,8 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(str(self.emptyDeck), 'Deck:\n')
 
     def test_polymorphism_demo(self) -> None:
-        setOfCards:List[AbstractCard] = PlayingCard.makeDeck()[:5]
-        for i in range(4):
-            setOfCards.append(UnoCard(UnoCard._SUITS[i], i))
-        setOfCards.append(UnoCard('Wild', 13))
+        setOfCards:List[AbstractCard] = PlayingCard.makeDeck()[0:52:9]
+        setOfCards.extend(UnoCard.makeDeck()[0:108:21])
         mixedDeck:Deck = Deck(setOfCards)
         mixedDeck.shuffle()
         print(str(mixedDeck))
