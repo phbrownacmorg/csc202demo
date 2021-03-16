@@ -48,4 +48,7 @@ class Deck(object):
         for i in range(len(self._cards)-1, 0, -1):
             swapIndex = random.randint(0, i)
             self._cards[i], self._cards[swapIndex] = self._cards[swapIndex], self._cards[i]
-        
+    
+    def deal_random(self) -> AbstractCard:
+        """Deal off a card from a random position in the deck."""
+        return self.deal()

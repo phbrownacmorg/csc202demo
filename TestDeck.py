@@ -85,5 +85,16 @@ class TestDeck(unittest.TestCase):
         print(str(mixedDeck))
         self.assertTrue(True)
 
+    def test_random_deal(self) -> None:
+        random.seed("Listening in class is generally a good idea.")
+        for i in range(52, 0, -1): # type: int
+            with self.subTest(i=i):
+                self.assertEqual(i, len(self.deck))
+                card:AbstractCard = self.deck.deal_random()
+                # There will probably be one or maybe two exceptions.  Handle them specially.
+                self.assertTrue((card.rank() % 13 != i % 13)
+                                    or (card.suit() != card._SUITS[(i-1) // 13]))
+        self.assertTrue(self.deck.isEmpty())
+
 if __name__ == '__main__':
     unittest.main()
