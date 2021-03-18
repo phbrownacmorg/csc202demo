@@ -30,7 +30,6 @@ class Stack(Generic[T]):
         assert not self.isEmpty()
         return self._items.pop()
 
-
 def balancedDelims(inputStr:str) -> bool:
     balanced:bool = True
     leftDelims:str = """({[<"'"""
