@@ -30,34 +30,3 @@ class Stack(Generic[T]):
         assert not self.isEmpty()
         return self._items.pop()
 
-def balancedDelims(inputStr:str) -> bool:
-    balanced:bool = True
-    leftDelims:str = """({[<"'"""
-    rightDelims:str = """)}]>"'"""
-    stack = Stack[str]()
-    for c in inputStr:
-        if c in leftDelims:
-            idx:int = leftDelims.find(c)
-            stack.push(rightDelims[idx])
-        elif c in rightDelims:
-            balanced = not stack.isEmpty() and (c == stack.pop())
-        if not balanced:
-            break
-    return balanced and stack.isEmpty()
-
-def checkForBalanced() -> None:
-    """Demonstrate applications of the Stack."""
-    print('Single-character delimiters are these: (){}[]<>\'\'\"\"')
-    inputStr:str = input('Please enter a string containing single-character delimiters:')
-    print('The string \"' + inputStr + '\" is', end='')
-    if not balancedDelims(inputStr):
-        print(' NOT', end='')
-    print(' balanced.')
-
-def main(args:List[str]) -> int:
-    checkForBalanced()
-    return 0
-
-if __name__ == '__main__':
-    import sys
-    main(sys.argv)
