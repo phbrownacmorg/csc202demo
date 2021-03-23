@@ -11,14 +11,15 @@ class Queue(Generic[T]):
         valid = valid and 0 <= self._head < self._capy
         valid = valid and 0 <= self._tail < self._capy
         valid = valid and self._items[self._head] is not None or (self._items[self._head] is None and self._tail == self._head)
+        #print(self._tail)
         valid = valid and self._items[self._tail] is None or (self._items[self._tail] is not None and self._head == self._tail)
         return valid
 
-    def __init__(self, capy:int = 4) -> None:
+    def __init__(self, capy:int = 2) -> None:
         """Make an empty queue with capacity CAPY.  The default for CAPY is intentionally set low."""
         # Pre:
         assert capy > 0
-        self._items:List[T] = [None] * capy
+        self._items:List[T] = [None] * capy # type: ignore
         self._head:int = 0
         self._tail:int = 0
         self._capy = capy
@@ -31,12 +32,12 @@ class Queue(Generic[T]):
     def enqueue(self, newItem:T) -> None:
         """Add item NEWITEM to the tail of the queue."""
         # Pre:
-        assert self._invariant()
+        assert self._invariant() and newItem is not None
         if self._items[self._tail] is None: # If room
             self._items[self._tail] = newItem
             self._tail = self._tail + 1
             if self._tail == self._capy:
-                self._tail == 0
+                self._tail = 0
         else: # Need to grow the capacity
             raise NotImplementedError
         # Post:
@@ -47,6 +48,7 @@ class Queue(Generic[T]):
         # Pre:
         assert self._invariant() and not self.isEmpty()
         returnValue:T = self._items[self._head]
+        self._items[self._head] = None # type: ignore
         self._head = self._head + 1
         if self._head == self._capy:
             self._head = 0

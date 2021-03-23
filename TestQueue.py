@@ -44,5 +44,26 @@ class TestQueue(unittest.TestCase):
         self.assertEqual(self.emptyQ.dequeue(), 'foo')
         self.assertTrue(self.emptyQ.isEmpty())
 
+
+    def testRepeatNoGrow(self) -> None:
+        self.assertTrue(self.emptyQ.isEmpty())
+        self.emptyQ.enqueue('bar')                      # bar
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.emptyQ.enqueue('foo')                      # bar, foo
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.assertEqual(self.emptyQ.dequeue(), 'bar')  # foo
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.emptyQ.enqueue('baz')                      # foo, baz
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.assertEqual(self.emptyQ.dequeue(), 'foo')  # baz
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.emptyQ.enqueue('oogba')                    # baz, oogba
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.assertEqual(self.emptyQ.dequeue(), 'baz')  # oogba
+        self.assertFalse(self.emptyQ.isEmpty())
+        self.assertEqual(self.emptyQ.dequeue(), 'oogba')
+        self.assertTrue(self.emptyQ.isEmpty())
+
+
 if __name__ == '__main__':
     unittest.main()
