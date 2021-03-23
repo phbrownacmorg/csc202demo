@@ -39,8 +39,18 @@ def baseConvert(number:int, base:int) -> str:
     # Pre:
     assert number >= 0 and 2 <= base <= len(digits)
     result:str = ''
+    s:Stack[str] = Stack[str]()
 
+    n:int = number
+    while n != 0:
+        s.push(digits[n % base]) # Push the digit
+        n = n // base
 
+    while not s.isEmpty():
+        result = result + s.pop()
+    
+    if result == '':
+        result = '0'
 
     return result
 
