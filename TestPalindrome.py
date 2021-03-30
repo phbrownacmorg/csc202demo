@@ -27,7 +27,7 @@ class TestNothing(unittest.TestCase):
         self.assertTrue(palindrome('tacocat'))
 
     def test_TR(self) -> None:
-        self.assertTrue('A man, a plan, a canal: Panama!')
+        self.assertTrue(palindrome('A man, a plan, a canal: Panama!'))
 
     def test_interesting_a(self) -> None:
         self.assertTrue(interesting('a'))

@@ -28,10 +28,7 @@ class TestLList(unittest.TestCase):
         self.assertEqual(str(self._one), '❬foo❭➞∅')
 
     def test_str_two(self) -> None:
-        self.assertEqual(str(self._two), '❬bar❭➞❬foo❭➞∅')
-
-    def test_size_0(self) -> None:
-        self.assertEqual(self._empty.size(), 0)
+        self.assertEqual(str(self._two), '❬foo❭➞❬bar❭➞∅')
 
     def test_size_0(self) -> None:
         self.assertEqual(self._empty.size(), 0)
@@ -69,9 +66,9 @@ class TestLList(unittest.TestCase):
         self.assertTrue(self._one.isEmpty())
 
     def test_pop_two(self) -> None:
-        self.assertEqual(self._two.pop(), 'foo')
-        self.assertEqual(str(self._two), '❬bar❭➞∅')
         self.assertEqual(self._two.pop(), 'bar')
+        self.assertEqual(str(self._two), '❬foo❭➞∅')
+        self.assertEqual(self._two.pop(), 'foo')
         self.assertTrue(self._two.isEmpty())
 
     def test_popn_two_n2(self) -> None:
@@ -83,8 +80,8 @@ class TestLList(unittest.TestCase):
             self._two.pop(2)
 
     def test_popn_two_0(self) -> None:
-        self.assertEqual(self._two.pop(0), 'bar')
-        self.assertEqual(str(self._two), '❬foo❭➞∅')
+        self.assertEqual(self._two.pop(0), 'foo')
+        self.assertEqual(str(self._two), '❬bar❭➞∅')
 
 if __name__ == '__main__':
     unittest.main()
