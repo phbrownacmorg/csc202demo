@@ -71,6 +71,98 @@ class TestRecursion(unittest.TestCase):
         self.assertEqual(gcd(-12, -15), 3)
         self.assertEqual(gcd(12, -15), 3)
 
+    def test_slowexp(self) -> None:
+        self.assertAlmostEqual(slowexp(1, 0), 1)
+        self.assertAlmostEqual(slowexp(2, 0), 1)
+        self.assertAlmostEqual(slowexp(-2.5, 0), 1)
+        self.assertAlmostEqual(slowexp(1, 1), 1)
+        self.assertAlmostEqual(slowexp(2, 1), 2)
+        self.assertAlmostEqual(slowexp(-2.5, 1), -2.5)
+        self.assertAlmostEqual(slowexp(1, 2), 1)
+        self.assertAlmostEqual(slowexp(2, 2), 4)
+        self.assertAlmostEqual(slowexp(-2.5, 2), 6.25)
+        self.assertAlmostEqual(slowexp(1, 5), 1)
+        self.assertAlmostEqual(slowexp(2, 5), 32)
+        self.assertAlmostEqual(slowexp(-2.5, 5), -97.65625)
+
+    def test_fastexp(self) -> None:
+        self.assertAlmostEqual(fastexp(1, 0), 1)
+        self.assertAlmostEqual(fastexp(2, 0), 1)
+        self.assertAlmostEqual(fastexp(-2.5, 0), 1)
+        self.assertAlmostEqual(fastexp(1, 1), 1)
+        self.assertAlmostEqual(fastexp(2, 1), 2)
+        self.assertAlmostEqual(fastexp(-2.5, 1), -2.5)
+        self.assertAlmostEqual(fastexp(1, 2), 1)
+        self.assertAlmostEqual(fastexp(2, 2), 4)
+        self.assertAlmostEqual(fastexp(-2.5, 2), 6.25)
+        self.assertAlmostEqual(fastexp(1, 5), 1)
+        self.assertAlmostEqual(fastexp(2, 5), 32)
+        self.assertAlmostEqual(fastexp(-2.5, 5), -97.65625)
+
+     # ------------------------- Base conversions ------------------------------
+
+    def test_233_2(self) -> None:
+        self.assertEqual(baseconv(233, 2), '11101001')
+
+    def test_233_8(self) -> None:
+        self.assertEqual(baseconv(233, 8), '351')
+
+    def test_233_16(self) -> None:
+        self.assertEqual(baseconv(233, 16), 'e9')
+
+    def test_233_26(self) -> None:
+        self.assertEqual(baseconv(233, 26), '8p')
+
+    def test_25_2(self) -> None:
+        self.assertEqual(baseconv(25, 2), '11001')
+
+    def test_25_8(self) -> None:
+        self.assertEqual(baseconv(25, 8), '31')
+
+    def test_25_16(self) -> None:
+        self.assertEqual(baseconv(25, 16), '19')
+
+    def test_25_26(self) -> None:
+        self.assertEqual(baseconv(25, 26), 'p')
+
+    def test_256_2(self) -> None:
+        self.assertEqual(baseconv(256, 2), '100000000')
+    
+    def test_256_8(self) -> None:
+        self.assertEqual(baseconv(256, 8), '400')
+
+    def test_256_16(self) -> None:
+        self.assertEqual(baseconv(256, 16), '100')
+    
+    def test_256_26(self) -> None:
+        self.assertEqual(baseconv(256, 26), '9m')
+
+    def test_26_2(self) -> None:
+        self.assertEqual(baseconv(26, 2), '11010')
+
+    def test_26_8(self) -> None:
+        self.assertEqual(baseconv(26, 8), '32')
+
+    def test_26_16(self) -> None:
+        self.assertEqual(baseconv(26, 16), '1a')
+
+    def test_26_26(self) -> None:
+        self.assertEqual(baseconv(26, 26), '10')
+
+    def test_0_10(self) -> None:
+        self.assertEqual(baseconv(0, 10), '0')
+
+    def test_big_base(self) -> None:
+        with self.assertRaises(AssertionError):
+            baseconv(233, 37)
+
+    def test_small_base(self) -> None:
+        with self.assertRaises(AssertionError):
+            baseconv(233, 1)
+
+    def test_neg_num(self) -> None:
+        with self.assertRaises(AssertionError):
+            baseconv(-1, 16)
 
 if __name__ == '__main__':
     unittest.main()

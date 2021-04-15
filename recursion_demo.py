@@ -35,3 +35,82 @@ def gcd(a:int, b:int) -> int:
     else: # Recursive case
         result = gcd(b, a % b)
     return abs(result)
+
+def slowexp(a:float, b:int) -> float:
+    """Find a**b recursively, where b is a natural number.  
+    O(n) algorithm.
+    
+    a ** b = 1 if b = 0
+           = a * (a ** (b-1)) if b > 0
+    """
+    # Pre:
+    assert b >= 0
+    result:float = 1 # Already handles base case
+    if b > 0: # Recursive case
+        result = a * slowexp(a, b - 1)
+    return result
+
+def fastexp(a:float, b:int) -> float:
+    """Find a**b recursively, where b is a natural number.
+    This algorithm runs faster, in O() time.
+    
+    a ** b = 1 if b == 0
+           = (a ** (b//2)) ** 2 if b > 0 and b is even
+           = a * (a ** (b//2)) ** 2 if b > 0 and b is odd
+
+    How many function calls?
+    b  calls
+    0  1
+    1  2
+    2  3
+    3  3
+    4  4
+    5  4
+    6  4
+    7  4
+    8  5
+    9  5
+    10 5
+    11 5
+    12 5
+    13 5
+    14 5
+    15 5
+    16 6
+
+    O(lg n) algorithm
+    """
+    # Pre:
+    assert b >= 0
+    result:float = 1 # Already handles base case
+    if b > 0: # Recursive cases
+        halfexp:float = fastexp(a, b // 2)
+        if (b % 2 == 0):  # b is even
+            result = halfexp * halfexp
+        else:             # b is odd
+            result = a * halfexp * halfexp
+    return result
+
+def baseconv(x:int, base:int) -> str:
+    """Express the given integer X in the given base BASE.  Return the result as a string.
+    
+    x and b are natural numbers.
+
+    baseconv(x, base) = digits[x] if x < base
+                      = baseconv(x // base, base) + digits[x % base] if x >= base
+
+    Example: 233 in base 8
+    baseconv(233, 8) = baseconv(233 // 8, 8) + '1'
+                     = baseconv(29, 8) + '1'
+                     = baseconv(29 // 8, 8) + '5' + '1'
+                     = baseconv(3, 8) + '5' + '1'
+                     = '3' + '5' + '1'
+                     = '351'
+    """
+    # Pre:
+    digits = '0123456789abcdefghijklmnopqrstuvwxyz'
+    assert x >= 0 and base > 1 and base < len(digits)
+    result:str = digits[x % base] # Already handles base case
+    if x >= base:
+        result = baseconv(x // base, base) + result
+    return result
