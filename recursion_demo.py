@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from LList import LList
 
 def sum_python_list(numlist:List[int]) -> int:
@@ -113,4 +113,61 @@ def baseconv(x:int, base:int) -> str:
     result:str = digits[x % base] # Already handles base case
     if x >= base:
         result = baseconv(x // base, base) + result
+    return result
+
+def slowfib(n:int) -> int:
+    """Calculate and return the n'th Fibonacci number, recursively.
+
+    fib(0) = 0
+    fib(1) = 1
+    fib(n) = fib(n-1) + fib(n-2) for n > 1
+
+    n:      0 1 2 3 4  5  6  7  8   9 ...
+    fib(n): 0 1 1 2 3  5  8 13 21  34 ...
+    calls:  1 1 3 5 9 15 25 41 67 109  O(2**n)
+
+    This is unusably slow for large n.
+    """
+    # Pre:
+    assert n >= 0
+    result:int = n # Base cases: n==0, n==1
+    if n > 1: # Recursive case
+        result = slowfib(n-1) + slowfib(n-2)
+    return result
+
+def fibonacci(n:int) -> int:
+    """Calculate and return the n'th Fibonacci number, recursively.
+
+    fib(0) = 0
+    fib(1) = 1
+    fib(n) = fib(n-1) + fib(n-2) for n > 1
+
+    n:      0 1 2 3 4  5  6  7  8  9 ...
+    fib(n): 0 1 1 2 3  5  8 13 21 34 ...
+    calls:  1 1 3 4 5  6  7  8  9 10 ... O(n) 
+    """
+    # Pre:
+    assert n >= 0
+    result:int = n # Base cases: n==0, n==1
+    if n > 1: # Recursive case
+        result = fastfib(n)[1]
+    return result
+
+def fastfib(n:int) -> Tuple[int, int]:
+    """Calculate and return the n'th and (n-1)'st Fibonacci numbers, recursively.
+
+    fastfib(1) = (0, 1)
+    fastfib(n) = (fastfib(n-1)[1], fastfib(n-1)[0] + fastfib(n-1)[1]) for n > 1
+
+    n:      1 2 3 4 5 6  7  8  9 ...
+    fib(n): 1 1 2 3 5 8 13 21 34 ...
+    calls:  1 2 3 4 5 6  7  8  9 ... O(n)  
+    """
+    # Pre:
+    assert n >= 1
+    # Base case:
+    result:Tuple[int, int] = (0, 1)
+    if n > 1:
+        prev:Tuple[int, int] = fastfib(n-1)
+        result = (prev[1], prev[0] + prev[1])
     return result

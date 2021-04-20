@@ -2,6 +2,7 @@
 # Peter Brown, 26 Jan 2017
 
 import unittest
+from typing import List
 from recursion_demo import *
 from LList import LList
 
@@ -163,6 +164,23 @@ class TestRecursion(unittest.TestCase):
     def test_neg_num(self) -> None:
         with self.assertRaises(AssertionError):
             baseconv(-1, 16)
+
+
+    #------------ Fibonacci ------------------------------
+    def test_fib_neg(self) -> None:
+        with self.assertRaises(AssertionError):
+            fibonacci(-1)
+
+    def test_fib_n(self) -> None:
+        expected:List[int] = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233,377, 610, 987, 1597, 2584, 4181, 6765,
+        10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040,
+        1346269, 2178309, 3524578, 5702887, 9227465]
+        for i in range(len(expected)):
+            with self.subTest(i=i):
+                self.assertEqual(fibonacci(i), expected[i])
+
+    def test_fib_50(self) -> None:
+        self.assertEqual(fibonacci(50), 12586269025)
 
 if __name__ == '__main__':
     unittest.main()
