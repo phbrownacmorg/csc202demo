@@ -11,12 +11,12 @@ class TestBinTree(unittest.TestCase):
         self._1node:BinTree[str] = BinTree[str]('a')                   #      a
 
         self._3nodes:BinTree[str] = BinTree[str]('a')                  #      a      
-        self._3nodes.addLeft('b')                    #     /  \
-        self._3nodes.addRight('c')                   #    b    c
+        self._3nodes.addLeft('b')                                      #     /  \
+        self._3nodes.addRight('c')                                     #    b    c
 
-        self._6nodes:BinTree[str] = BinTree[str]('a')                                 #
-        self._6nodes.addLeft('b')                                   #          a
-        self._6nodes.addRight('c')                                  #       /      \
+        self._6nodes:BinTree[str] = BinTree[str]('a')                    #
+        self._6nodes.addLeft('b')                                        #          a
+        self._6nodes.addRight('c')                                       #       /      \
         cast(BinTree[str], self._6nodes.leftChild()).addRight('d')       #    b          c
         cast(BinTree[str], self._6nodes.rightChild()).addLeft('e')       #     \        / \
         cast(BinTree[str], self._6nodes.rightChild()).addRight('f')      #      d      e   f
@@ -95,7 +95,22 @@ class TestBinTree(unittest.TestCase):
     def test_len(self) -> None:
         self.assertEqual(len(self._1node), 1)  
         self.assertEqual(len(self._3nodes), 3)  
-        self.assertEqual(len(self._6nodes), 6) 
+        self.assertEqual(len(self._6nodes), 6)
+
+    def test_preorder(self) -> None:
+        self.assertEqual(self._1node.preorder(), ['a'])
+        self.assertEqual(self._3nodes.preorder(), ['a', 'b', 'c'])
+        self.assertEqual(self._6nodes.preorder(), ['a', 'b', 'd', 'c', 'e', 'f'])
+
+    def test_inorder(self) -> None:
+        self.assertEqual(self._1node.inorder(), ['a'])
+        self.assertEqual(self._3nodes.inorder(), ['b', 'a', 'c'])
+        self.assertEqual(self._6nodes.inorder(), ['b', 'd', 'a', 'e', 'c', 'f'])
+
+    def test_postorder(self) -> None:
+        self.assertEqual(self._1node.postorder(), ['a'])
+        self.assertEqual(self._3nodes.postorder(), ['b', 'c', 'a'])
+        self.assertEqual(self._6nodes.postorder(), ['d', 'b', 'e', 'f', 'c', 'a'])
 
 if __name__ == '__main__':
     unittest.main()

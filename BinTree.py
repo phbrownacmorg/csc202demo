@@ -51,6 +51,42 @@ class BinTree(Generic[T]):
             count = count + len(cast(BinTree[T], self._right))
         return count
 
+    # ----------- Traversals -----------------------
+
+    def preorder(self) -> List[T]:
+        """Do a depth-first preorder traversal, returning a list of the data values."""
+        result:List[T] = [] # Result for empty tree
+        if self._data is not None:
+            result.append(self._data) # Parent comes before children
+            if self.hasLeftChild():
+                result.extend(cast(BinTree[T], self._left).preorder())
+            if self.hasRightChild():
+                result.extend(cast(BinTree[T], self._right).preorder())
+        return result
+
+    def inorder(self) -> List[T]:
+        """Do a depth-first postorder traversal, returning a list of the data values."""
+        result:List[T] = [] # Result for empty tree
+        if self._data is not None:
+            if self.hasLeftChild():
+                result.extend(cast(BinTree[T], self._left).inorder())
+            result.append(self._data) # Parent comes after left and before right subtree
+            if self.hasRightChild():
+                result.extend(cast(BinTree[T], self._right).inorder())
+        return result
+
+    def postorder(self) -> List[T]:
+        """Do a depth-first postorder traversal, returning a list of the data values."""
+        result:List[T] = [] # Result for empty tree
+        if self._data is not None:
+            if self.hasLeftChild():
+                result.extend(cast(BinTree[T], self._left).postorder())
+            if self.hasRightChild():
+                result.extend(cast(BinTree[T], self._right).postorder())
+            result.append(self._data) # Parent comes after children
+        # print('postorder on (' + self._data + ') returning', result)
+        return result
+
     # ----------- Mutator methods -------------------
 
     def addLeft(self, value:T) -> None:
