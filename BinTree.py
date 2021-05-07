@@ -27,14 +27,18 @@ class BinTree(Generic[T]):
 
     # ---------- Query methods ------------------------------------------
 
-    def data(self) -> Optional[T]:
-        return self._data
+    def data(self) -> T:
+        # Pre:
+        assert self._data is not None
+        return cast(T, self._data)
 
-    def leftChild(self) -> Optional['BinTree[T]']:
-        return self._left                        
+    def leftChild(self) -> 'BinTree[T]':
+        assert self.hasLeftChild()
+        return cast(BinTree[T], self._left)
 
-    def rightChild(self) -> Optional['BinTree[T]']:
-        return self._right 
+    def rightChild(self) -> 'BinTree[T]':
+        assert self.hasRightChild()
+        return cast(BinTree[T], self._right)
 
     def hasLeftChild(self) -> bool:
         return (self._left is not None)
@@ -46,9 +50,9 @@ class BinTree(Generic[T]):
         """Return the number of nodes in the tree."""
         count = 1 # Current node
         if self.hasLeftChild():
-            count = count + len(cast(BinTree[T], self._left))
+            count = count + len(self.leftChild())
         if self.hasRightChild():
-            count = count + len(cast(BinTree[T], self._right))
+            count = count + len(self.rightChild())
         return count
 
     # ----------- Traversals -----------------------
@@ -59,9 +63,9 @@ class BinTree(Generic[T]):
         if self._data is not None:
             result.append(self._data) # Parent comes before children
             if self.hasLeftChild():
-                result.extend(cast(BinTree[T], self._left).preorder())
+                result.extend(self.leftChild().preorder())
             if self.hasRightChild():
-                result.extend(cast(BinTree[T], self._right).preorder())
+                result.extend(self.rightChild().preorder())
         return result
 
     def inorder(self) -> List[T]:
@@ -69,10 +73,10 @@ class BinTree(Generic[T]):
         result:List[T] = [] # Result for empty tree
         if self._data is not None:
             if self.hasLeftChild():
-                result.extend(cast(BinTree[T], self._left).inorder())
+                result.extend(self.leftChild().inorder())
             result.append(self._data) # Parent comes after left and before right subtree
             if self.hasRightChild():
-                result.extend(cast(BinTree[T], self._right).inorder())
+                result.extend(self.rightChild().inorder())
         return result
 
     def postorder(self) -> List[T]:
@@ -80,9 +84,9 @@ class BinTree(Generic[T]):
         result:List[T] = [] # Result for empty tree
         if self._data is not None:
             if self.hasLeftChild():
-                result.extend(cast(BinTree[T], self._left).postorder())
+                result.extend(self.leftChild().postorder())
             if self.hasRightChild():
-                result.extend(cast(BinTree[T], self._right).postorder())
+                result.extend(self.rightChild().postorder())
             result.append(self._data) # Parent comes after children
         # print('postorder on (' + self._data + ') returning', result)
         return result
@@ -92,13 +96,13 @@ class BinTree(Generic[T]):
     def addLeft(self, value:T) -> None:
         child:BinTree[T] = BinTree[T](value)
         if self.hasLeftChild():
-            child._left = self._left
+            child._left = self.leftChild()
         self._left = child
 
     def addRight(self, value:T) -> None:
         child:BinTree[T] = BinTree[T](value)
         if self.hasRightChild():
-            child._right = self._right           
+            child._right = self.rightChild()       
         self._right = child
     
 

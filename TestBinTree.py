@@ -2,24 +2,24 @@
 # Peter Brown, 4 May 2021
 
 import unittest
-from typing import cast
+from typing import cast, List
 from BinTree import BinTree
 
 class TestBinTree(unittest.TestCase):
 
     def setUp(self) -> None:
-        self._1node:BinTree[str] = BinTree[str]('a')                   #      a
+        self._1node:BinTree[str] = BinTree[str]('a')     #      a
 
-        self._3nodes:BinTree[str] = BinTree[str]('a')                  #      a      
-        self._3nodes.addLeft('b')                                      #     /  \
-        self._3nodes.addRight('c')                                     #    b    c
+        self._3nodes:BinTree[str] = BinTree[str]('a')    #      a      
+        self._3nodes.addLeft('b')                        #     /  \
+        self._3nodes.addRight('c')                       #    b    c
 
-        self._6nodes:BinTree[str] = BinTree[str]('a')                    #
-        self._6nodes.addLeft('b')                                        #          a
-        self._6nodes.addRight('c')                                       #       /      \
-        cast(BinTree[str], self._6nodes.leftChild()).addRight('d')       #    b          c
-        cast(BinTree[str], self._6nodes.rightChild()).addLeft('e')       #     \        / \
-        cast(BinTree[str], self._6nodes.rightChild()).addRight('f')      #      d      e   f
+        self._6nodes:BinTree[str] = BinTree[str]('a')    #
+        self._6nodes.addLeft('b')                        #          a
+        self._6nodes.addRight('c')                       #       /      \
+        self._6nodes.leftChild().addRight('d')           #    b          c
+        self._6nodes.rightChild().addLeft('e')           #     \        / \
+        self._6nodes.rightChild().addRight('f')          #      d      e   f
 
     def test_hasLeft(self) -> None:
         self.assertFalse(self._1node.hasLeftChild())
@@ -33,64 +33,49 @@ class TestBinTree(unittest.TestCase):
         self.assertEqual(self._1node.data(), 'a')
 
         self.assertEqual(self._3nodes.data(), 'a')
-        leftChild:BinTree[str] = cast(BinTree[str], self._3nodes.leftChild())
-        rightChild:BinTree[str] = cast(BinTree[str], self._3nodes.rightChild())
-        self.assertEqual(leftChild.data(), 'b')
-        self.assertEqual(rightChild.data(), 'c')
+        self.assertEqual(self._3nodes.leftChild().data(), 'b')
+        self.assertEqual(self._3nodes.rightChild().data(), 'c')
 
         self.assertEqual(self._6nodes.data(), 'a')
-        leftChild = cast(BinTree[str], self._6nodes.leftChild())
-        rightChild = cast(BinTree[str], self._6nodes.rightChild())
-        self.assertEqual(leftChild.data(), 'b')
-        self.assertEqual(rightChild.data(), 'c')
-        left_rightChild:BinTree[str] = cast(BinTree[str], leftChild.rightChild())
-        right_leftChild:BinTree[str] = cast(BinTree[str], rightChild.leftChild())
-        right_rightChild:BinTree[str] = cast(BinTree[str], rightChild.rightChild())
-        self.assertEqual(left_rightChild.data(), 'd')
-        self.assertEqual(right_leftChild.data(), 'e')
-        self.assertEqual(right_rightChild.data(), 'f')
+        self.assertEqual(self._6nodes.leftChild().data(), 'b')
+        self.assertEqual(self._6nodes.rightChild().data(), 'c')
+        self.assertEqual(self._6nodes.leftChild().rightChild().data(), 'd')
+        self.assertEqual(self._6nodes.rightChild().leftChild().data(), 'e')
+        self.assertEqual(self._6nodes.rightChild().rightChild().data(), 'f')
 
     def test_addLeft_noChild(self) -> None:
         self.assertFalse(self._1node.hasLeftChild())
         self._1node.addLeft('z')
         self.assertTrue(self._1node.hasLeftChild())
-        leftChild:BinTree[str] = cast(BinTree[str], self._1node.leftChild())
-        self.assertEqual(leftChild.data(), 'z')
+        self.assertEqual(self._1node.leftChild().data(), 'z')
 
     def test_addLeft_Child(self) -> None:
         self.assertTrue(self._3nodes.hasLeftChild())
-        leftChild:BinTree[str] = cast(BinTree[str], self._3nodes.leftChild())
-        self.assertEqual(leftChild.data(), 'b')
-        self.assertFalse(leftChild.hasLeftChild())
+        self.assertEqual(self._3nodes.leftChild().data(), 'b')
+        self.assertFalse(self._3nodes.leftChild().hasLeftChild())
 
         self._3nodes.addLeft('x')
         self.assertTrue(self._3nodes.hasLeftChild())
-        leftChild = cast(BinTree[str], self._3nodes.leftChild())
-        self.assertEqual(leftChild.data(), 'x')
-        self.assertTrue(leftChild.hasLeftChild())
-        left_leftChild:BinTree[str] = cast(BinTree[str], leftChild.leftChild())
-        self.assertEqual(left_leftChild.data(), 'b')
+        self.assertEqual(self._3nodes.leftChild().data(), 'x')
+        self.assertTrue(self._3nodes.leftChild().hasLeftChild())
+        self.assertEqual(self._3nodes.leftChild().leftChild().data(), 'b')
 
     def test_addRight_noChild(self) -> None:
         self.assertFalse(self._1node.hasRightChild())
         self._1node.addRight('y')
         self.assertTrue(self._1node.hasRightChild())
-        rightChild:BinTree[str] = cast(BinTree[str], self._1node.rightChild())
-        self.assertEqual(rightChild.data(), 'y')
+        self.assertEqual(self._1node.rightChild().data(), 'y')
 
     def test_addRight_Child(self) -> None:
         self.assertTrue(self._3nodes.hasRightChild())
-        rightChild:BinTree[str] = cast(BinTree[str], self._3nodes.rightChild())
-        self.assertEqual(rightChild.data(), 'c')
-        self.assertFalse(rightChild.hasRightChild())
+        self.assertEqual(self._3nodes.rightChild().data(), 'c')
+        self.assertFalse(self._3nodes.rightChild().hasRightChild())
 
         self._3nodes.addRight('w')
         self.assertTrue(self._3nodes.hasRightChild())
-        rightChild = cast(BinTree[str], self._3nodes.rightChild())
-        self.assertEqual(rightChild.data(), 'w')
-        self.assertTrue(rightChild.hasRightChild())
-        right_rightChild:BinTree[str] = cast(BinTree[str], rightChild.rightChild())
-        self.assertEqual(right_rightChild.data(), 'c')
+        self.assertEqual(self._3nodes.rightChild().data(), 'w')
+        self.assertTrue(self._3nodes.rightChild().hasRightChild())
+        self.assertEqual(self._3nodes.rightChild().rightChild().data(), 'c')
 
     def test_len(self) -> None:
         self.assertEqual(len(self._1node), 1)  
@@ -98,19 +83,19 @@ class TestBinTree(unittest.TestCase):
         self.assertEqual(len(self._6nodes), 6)
 
     def test_preorder(self) -> None:
-        self.assertEqual(self._1node.preorder(), ['a'])
-        self.assertEqual(self._3nodes.preorder(), ['a', 'b', 'c'])
-        self.assertEqual(self._6nodes.preorder(), ['a', 'b', 'd', 'c', 'e', 'f'])
+        self.assertEqual(self._1node.preorder(), cast(List[str], ['a']))
+        self.assertEqual(self._3nodes.preorder(), cast(List[str], ['a', 'b', 'c']))
+        self.assertEqual(self._6nodes.preorder(), cast(List[str], ['a', 'b', 'd', 'c', 'e', 'f']))
 
     def test_inorder(self) -> None:
-        self.assertEqual(self._1node.inorder(), ['a'])
-        self.assertEqual(self._3nodes.inorder(), ['b', 'a', 'c'])
-        self.assertEqual(self._6nodes.inorder(), ['b', 'd', 'a', 'e', 'c', 'f'])
+        self.assertEqual(self._1node.inorder(), cast(List[str], ['a']))
+        self.assertEqual(self._3nodes.inorder(), cast(List[str], ['b', 'a', 'c']))
+        self.assertEqual(self._6nodes.inorder(), cast(List[str], ['b', 'd', 'a', 'e', 'c', 'f']))
 
     def test_postorder(self) -> None:
-        self.assertEqual(self._1node.postorder(), ['a'])
-        self.assertEqual(self._3nodes.postorder(), ['b', 'c', 'a'])
-        self.assertEqual(self._6nodes.postorder(), ['d', 'b', 'e', 'f', 'c', 'a'])
+        self.assertEqual(self._1node.postorder(), cast(List[str], ['a']))
+        self.assertEqual(self._3nodes.postorder(), cast(List[str], ['b', 'c', 'a']))
+        self.assertEqual(self._6nodes.postorder(), cast(List[str], ['d', 'b', 'e', 'f', 'c', 'a']))
 
 if __name__ == '__main__':
     unittest.main()

@@ -40,6 +40,9 @@ class TestBST(unittest.TestCase):
         self.assertTrue(70 in self._6nodes)
         self.assertFalse(57 in self._6nodes)
 
+    def testSuccessor(self) -> None:
+        self.assertEqual(self._1node.findSuccessor(), None)
+
 
 if __name__ == '__main__':
     unittest.main()
