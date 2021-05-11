@@ -8,6 +8,8 @@ from BinTree import BinTree
 class TestBinTree(unittest.TestCase):
 
     def setUp(self) -> None:
+        self._empty:BinTree[str] = BinTree[str](None)
+
         self._1node:BinTree[str] = BinTree[str]('a')     #      a
 
         self._3nodes:BinTree[str] = BinTree[str]('a')    #      a      
@@ -20,6 +22,12 @@ class TestBinTree(unittest.TestCase):
         self._6nodes.leftChild().addRight('d')           #    b          c
         self._6nodes.rightChild().addLeft('e')           #     \        / \
         self._6nodes.rightChild().addRight('f')          #      d      e   f
+
+    def test_isEmpty(self) -> None:
+        self.assertTrue(self._empty.isEmpty())
+        self.assertFalse(self._1node.isEmpty())
+        self.assertFalse(self._3nodes.isEmpty())
+        self.assertFalse(self._6nodes.isEmpty())
 
     def test_hasLeft(self) -> None:
         self.assertFalse(self._1node.hasLeftChild())

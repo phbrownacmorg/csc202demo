@@ -27,6 +27,10 @@ class BinTree(Generic[T]):
 
     # ---------- Query methods ------------------------------------------
 
+    def isEmpty(self) -> bool:
+        """An empty tree is represented by a node with no children and its data set to None."""
+        return self._data is None and self._left is None and self._right is None
+
     def data(self) -> T:
         # Pre:
         assert self._data is not None

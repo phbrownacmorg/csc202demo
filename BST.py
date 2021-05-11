@@ -13,19 +13,21 @@ class BST(BinTree[T]):
         #print(self._data, self, self._parent)
         #if self._parent is not None:
         #    print(self._parent.leftChild(), self._parent.rightChild())
-        valid:bool = (self._parent is None) or (self == self._parent.leftChild()) \
-                    or (self == self._parent.rightChild())
+        valid:bool = super()._invariant()
+        valid = valid and ((self._parent is None) or (self is self._parent._left) \
+                    or (self is self._parent._right))
+
         if self.hasLeftChild():
-            leftChild:BinTree[T] = self.leftChild()
-            valid = valid and leftChild._invariant()
+            valid = valid and self.leftChild()._invariant()
             # Ensure that self._data > the maximum element in the left subtree
-            maxChild:BinTree[T] = leftChild
+            maxChild:BinTree[T] = self.leftChild()
             while maxChild.hasRightChild():
                 maxChild = maxChild.rightChild()
             valid = valid and (self.data() > maxChild.data())               # type: ignore
+
         if self.hasRightChild():
             valid = valid and self.rightChild()._invariant()
-            # Ensure that self._data > the maximum element in the left subtree
+            # Ensure that self._data < the minimum element in the right subtree
             minChild:BinTree[T] = self.rightChild()
             while minChild.hasLeftChild():
                 minChild = minChild.leftChild()
@@ -39,13 +41,15 @@ class BST(BinTree[T]):
     def isRoot(self) -> bool:
         return self._parent is None
 
-    def parent(self) -> BST[T]:
+    def parent(self) -> 'BST[T]':
         assert not self.isRoot()
         return cast(BST[T], self._parent)
 
     def __contains__(self, value:T) -> bool:
         result:bool = False
-        if self._data == value:
+        if self._data is None:
+            result = False
+        elif self.data() == value:
             result = True
         elif (self.data() > value) and self.hasLeftChild():                 # type: ignore
             result = (value in cast(BST[T], self.leftChild()))
@@ -61,8 +65,8 @@ class BST(BinTree[T]):
             while successor.hasLeftChild():
                 successor = cast(BST[T], successor.leftChild())
         # If we get here, self has no right child
-        elif self._parent is not None:
-            if self._parent.leftChild() == self:
+        elif not self.isRoot():
+            if self.parent().hasLeftChild() and self is self.parent().leftChild():
                 successor = self._parent
             else:
                 # Self is in its parent's right subtree.  Since self has no right child,
@@ -72,11 +76,11 @@ class BST(BinTree[T]):
                 # because self has no right subtree).
                 
                 # Temporarily remove self (and any descendants) from the tree
-                self._parent._right = None
+                self.parent()._right = None
                 # Now, find the parent's successor
-                successor = self._parent.findSuccessor()
+                successor = self.parent().findSuccessor()
                 # Now put self back to avoid fouling up the tree
-                self._parent._right = self
+                self.parent()._right = self
 
         return successor
 
@@ -94,7 +98,7 @@ class BST(BinTree[T]):
             # First recursive case: add value to left subtree
             else: 
                 cast(BST[T], self.leftChild()).add(value)
-        elif value > self._data:                          # type: ignore
+        elif value > self.data():                          # type: ignore
             # Third base case: value > self._data and self has no right child
             if not self.hasRightChild():
                 self._right = BST[T](value)
@@ -113,7 +117,9 @@ class BST(BinTree[T]):
         #       a.  Node with value has two children
         #       b.  Node with value has one children
         #       c.  Node with value has no children
-        if value == self.data():         # This is the node we are looking for.
+        if self.isEmpty(): # Do nothing.  This just protects the calls to self.data() later.
+            pass
+        elif value == self.data():         # This is the node we are looking for.
             # Two children, case a.  Copy up the successor.
             if self.hasRightChild() and self.hasLeftChild(): 
                 # With two children, the successor will be in the right subtree
@@ -140,16 +146,18 @@ class BST(BinTree[T]):
                     cast(BST[T], self.rightChild())._parent = self
 
             # No children, case c.  Just delete this node.                    
-            else: 
-                if not self.isRoot() and self.parent().leftChild() == self:
+            else:
+                if not self.isRoot() and self is self.parent().leftChild():
                     self.parent()._left = None
-                elif not self.isRoot() and self.parent().rightChild() == self:
+                elif not self.isRoot() and self is self.parent().rightChild():
                     self.parent()._right = None
+                self._parent = None  # Break the link in both directions (for self._invariant())
+                self._data = None    # Remove the data (so value not in self)
 
-        elif value > self._data and self.hasLeftChild():   # type: ignore
+        elif value < self.data() and self.hasLeftChild():   # type: ignore
             # Delete from left subtree.  If there is no left subtree, do nothing.
             cast(BST[T], self.leftChild()).remove(value)
-        elif value < self._data and self.hasRightChild():  # type: ignore
+        elif value > self.data() and self.hasRightChild():  # type: ignore
             # Delete from right subtree.  If there is no right subtree, do nothing.
             cast(BST[T], self.rightChild()).remove(value)
 
