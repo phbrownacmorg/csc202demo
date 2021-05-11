@@ -58,7 +58,7 @@ class BST(BinTree[T]):
         return result
 
     def findSuccessor(self) -> Optional['BST[T]']:
-        """Given a node, find the next node afte rit in an inorder traversal of the tree."""
+        """Given a node, find the next node after it in an inorder traversal of the tree."""
         successor:Optional[BST[T]] = None
         if self.hasRightChild(): # Successor is in the right subtree.  Find the smallest node there.
             successor = cast(BST[T], self.rightChild())
